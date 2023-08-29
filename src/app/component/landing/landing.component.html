@@ -1,13 +1,22 @@
 <div class="landing d-flex justify-content-center position-relative">
-    <div class="adBtnGroup d-flex">
-        <div class="adBtn" (click)="showLogin()"><span class="adtxt">LOGIN</span></div>
-        <div class="adBtn" (click)="showRegister()"><span class="adtxt">REGISTER</span></div>
+    <div class="adBtnGroup">
+        <div *ngIf="isLogged; else notLogged" class="d-flex justify-content-center">
+            <div class="adBtn" (click)="nextPage()"><span class="adtxt">CONTINUE</span></div>
+        </div>
+        <ng-template #notLogged>
+            <div class="d-flex justify-content-center">
+                <div class="adBtn" (click)="showLogin()"><span class="adtxt">LOGIN</span></div>
+                <div class="adBtn" (click)="showRegister()"><span class="adtxt">REGISTER</span></div>
+            </div>
+        </ng-template>
+        
+        
     </div>
 
     <div *ngIf="loginIsShown" class="loginComp position-absolute w-100 h-100 start-0 top-0" (click)="hideLogin()">
         <div #loginWindow class="loginWindow position-absolute start-0 px-4" (click)="stopEvent($event)">
             <div class="closeIcon position-absolute" (click)="hideLogin()"><span class="fa-solid fa-xmark close-icon"></span></div>
-            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <form [formGroup]="form" (ngSubmit)="onSubmitLogin()">
                 <div class="mb-3">
                     <input type="text" formControlName="email" class="InputField" placeholder="Email" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" />
                     <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
@@ -31,11 +40,11 @@
     <div *ngIf="registerIsShown" class="registerComp position-absolute w-100 h-100 start-0 top-0" (click)="hideRegister()">
         <div #registerWindow class="registerWindow position-absolute end-0 px-4" (click)="stopEvent($event)">
             <div class="closeIcon position-absolute" (click)="hideRegister()"><span class="fa-solid fa-xmark close-icon"></span></div>
-            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <form [formGroup]="form" (ngSubmit)="onSubmitRegister()">
                 <div class="mb-3">
-                    <input type="text" formControlName="fullName" id="floatingInput" class="InputField" placeholder="Full Name" [ngClass]="{ 'is-invalid': submitted && f['fullName'].errors }" />
-                    <div *ngIf="submitted && f['fullName'].errors" class="invalid-feedback">
-                        <div *ngIf="f['fullName'].errors['required']">Name is required</div>
+                    <input type="text" formControlName="username" id="floatingInput" class="InputField" placeholder="Full Name" [ngClass]="{ 'is-invalid': submitted && f['username'].errors }" />
+                    <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
+                        <div *ngIf="f['username'].errors['required']">Name is required</div>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -46,9 +55,10 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <input type="password" formControlName="password" class="InputField" placeholder="Password" [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" />
+                    <input type="password" formControlName="password" class="InputField" placeholder="Password" minlength="6" [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" />
                     <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
                         <div *ngIf="f['password'].errors['required']">Password is required</div>
+                        <div *ngIf="f['password'].errors['minlength']">Password must be at least 6 characters</div>
                     </div>
                 </div>
                 <div class="mb-3">

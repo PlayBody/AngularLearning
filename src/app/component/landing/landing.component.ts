@@ -1,7 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs';
+
 import { MustMatch } from 'src/app/_helper/must-match.validator';
+import { AuthService } from 'src/app/service/auth.service';
+import { StorageService } from 'src/app/service/storage.service';
+import { Account } from 'src/app/_model/account';
 
 @Component({
   selector: 'app-landing',
@@ -16,24 +21,29 @@ export class LandingComponent implements OnInit {
   loginIsShown = false;
   registerIsShown = false;
   form! : FormGroup;
-  submitting = false;
   submitted = false;
+  isLogged = false;
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
+    private authService: AuthService,
+    private storageSevice: StorageService
   ) {}
 
   ngOnInit() {
       this.form = this.formBuilder.group({
-        fullName: ['', Validators.required],
+        username: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
         password: ['', Validators.required],
         confirmPassword: ['', Validators.required],
       }, {
         validator: MustMatch('password', 'confirmPassword')
-      })
+      });
+
+      if(this.storageSevice.isLoggedIn()) {
+        this.isLogged = true;
+      }
   }
 
   // Convenience getter for easy access to form fields
@@ -53,6 +63,10 @@ export class LandingComponent implements OnInit {
     }, 0);
   }
 
+  nextPage(){
+    this.router.navigate(['/dashboard'])
+  }
+
   hideLogin() {
     this.loginIsShown = false;
   }
@@ -65,7 +79,7 @@ export class LandingComponent implements OnInit {
     event.stopPropagation();
   }
 
-  onSubmit() {
+  onSubmitLogin() {
     this.submitted = true;
 
     // Stop here if form is invalid
@@ -73,6 +87,45 @@ export class LandingComponent implements OnInit {
       return;
     }
 
-    this.submitting = true;
+    this.authService.login(this.f['email'].value, this.f['password'].value)
+      .pipe(first())
+      .subscribe({
+        next: (res) => {
+          this.storageSevice.saveUser(res)
+          this.router.navigate(['/dashboard']);
+        },
+        error: (error) => {
+          console.error(error)
+        }
+      })
+
+  }
+
+  onSubmitRegister() {
+    this.submitted = true;
+
+    // Stop here if form is invalid
+    if(this.form.invalid) {
+      return;
+    }
+
+    delete this.form.value.confirmPassword;
+    let reg_userInfo: Account = this.form.value
+    console.log(reg_userInfo)
+
+    this.authService.register(reg_userInfo)
+      .pipe(first())
+      .subscribe({
+        next: (res) => {
+          console.log(res)
+          if(res) {
+            this.registerIsShown = false;
+            // window.location.reload();
+          }
+        },
+        error: (e) => {
+          console.log(e);
+        }
+      })
   }
 }
