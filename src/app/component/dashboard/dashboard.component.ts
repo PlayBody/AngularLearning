@@ -1,10 +1,14 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
+import { InputComponent } from '../material/input/input.component';
 import { StorageService } from 'src/app/service/storage.service';
 import { AuthService } from 'src/app/service/auth.service';
-import { InputComponent } from '../material/input/input.component';
+import { SubjectService } from 'src/app/service/subject.service';
 import { ScoreService } from 'src/app/service/score.service';
+import { Subject } from 'src/app/_model/subject.model';
+import { Data } from 'src/app/_model/data.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,6 +21,9 @@ export class DashboardComponent implements OnInit {
   auth_user?: string;
   usernames: string[] = [];
   scores: { username: string, score: number | 0 }[] = [];
+  user_score: Data[] = [];
+  scoreOfUser: number[] = [];
+  subjects: Subject[] = [];
   sub_name!: string;
   testDate!: any;
 
@@ -29,7 +36,8 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private storageService: StorageService,
     private authService: AuthService,
-    private scoreService: ScoreService
+    private scoreService: ScoreService,
+    private subjectService: SubjectService
   ) {}
 
   ngOnInit(): void {
@@ -51,6 +59,21 @@ export class DashboardComponent implements OnInit {
         },
         error: (e) => console.log(e)
       })
+
+      this.subjectService.getAll().subscribe({
+        next: (res) => {
+          res.map(test => this.subjects.push(test))
+        },
+        error: (e) => console.log(e)
+      })
+
+      this.scoreService.getAllScore().subscribe({
+        next: (response) => {
+          console.log(response)
+          response.map((res) => this.user_score.push(res))
+        },
+        error: (e) => console.log(e)
+      })
   }
 
   logout(){
@@ -66,6 +89,27 @@ export class DashboardComponent implements OnInit {
         console.log(e)
       }
     })
+  }
+
+
+  filterBy(currentUser: string, testType?: string, testDate?: string) {
+    const score_array: number[] = [];
+
+    this.user_score.map((data) => {
+      data.username === currentUser &&
+      data.test!.map((test) => {
+        if (
+          test.sub_name === testType &&
+          test.testDate === testDate
+        ) {
+          score_array.push(test.score!)
+        }
+      })
+    })
+
+    this.scoreOfUser = score_array;
+
+    return score_array;
   }
 
   previous(){

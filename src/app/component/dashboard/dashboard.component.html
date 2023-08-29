@@ -28,22 +28,27 @@
                 <div class="addBtn py-1 px-3 ms-4" (click)="showAddScore()">ADD</div>
             </div>
             
-            <!-- <table class="adtable w-100">
+            <table class="adtable w-100">
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th *ngFor="let subject of subjects">{{subject}}</th>
+                        <th *ngFor="let subject of subjects">
+                            <div>
+                                <div>{{subject.testType}}</div>
+                                <div>{{subject.testDate}}</div>
+                            </div>
+                        </th>
                         <th>Average</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let individual of usernames">
-                        <td>{{individual.name}}</td>
-                        <td *ngFor="let score of individual.scores">{{score}}</td>
-                        <td>{{calcAverage(individual.scores)}}</td>
+                    <tr *ngFor="let user of user_score">
+                        <td>{{user.username}}</td>
+                        <td *ngFor="let subject of subjects">{{filterBy(user.username!, subject.testType, subject.testDate)}}</td>
+                        <td>{{calcAverage(scoreOfUser)}}</td>
                     </tr>
                 </tbody>
-            </table> -->
+            </table>
         </div>
     </div>
 

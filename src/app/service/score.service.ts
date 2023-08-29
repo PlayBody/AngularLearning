@@ -12,8 +12,8 @@ export class ScoreService {
 
   constructor( private http: HttpClient ) { }
 
-  getAllScore(): Observable<any> {
-    return this.http.get(API_URL);
+  getAllScore(): Observable<Data[]> {
+    return this.http.get<Data[]>(API_URL);
   }
 
   addScore(data: any) {
