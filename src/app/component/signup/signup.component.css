@@ -1,0 +1,59 @@
+.adRegister{
+    width: 100%;
+    height: 100%;
+    background: rgba(75, 76, 81, 0.9);
+    padding-top: 20rem;
+
+    .closeIcon{
+        top: 3rem;
+        left: 3rem;
+        cursor: pointer;
+
+        .close-icon{
+            font-size: 20px;
+            color: white;
+        }
+    }
+
+    .InputField {
+        width: 100%;
+        height: 2.8rem;
+        outline: none;
+        padding: 0.4rem 1rem;
+        border: 1px solid rgba(75, 76, 81, 0.9);
+        border-radius: 1.2rem;
+    }
+
+    .mat-mdc-radio-button ~ .mat-mdc-radio-button {
+        margin-left: 16px;
+    }
+
+    .radioGroup{
+        color: white;
+        
+        .radio-admin .radio-user{
+            color: white;
+        }
+    }
+    
+    
+    .submitBtn{
+        width: 100%;
+        height: 2.8rem;
+        border: 1px solid rgba(75, 76, 81, 0.9);
+        border-radius: 1.2rem;
+        background-color: white;
+        text-align: center;
+        padding-top: 0.5rem;
+        font-size: 18px;
+        font-family:sans-serif;
+        font-weight: 600;
+        color:#3f3f3f;
+
+        &:hover{
+            background-color: rgba(75, 76, 81, 0.9);
+            color: white;
+            border-color: white;
+        }
+    }
+}

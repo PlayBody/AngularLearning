@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -13,6 +14,8 @@ import { LandingComponent } from './component/landing/landing.component';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { InputComponent } from './component/material/input/input.component';
 import { httpInterceptorProviders } from './_helper/http.interceptor';
+import { SigninComponent } from './component/signin/signin.component';
+import { SignupComponent } from './component/signup/signup.component';
 
 
 @NgModule({
@@ -20,7 +23,9 @@ import { httpInterceptorProviders } from './_helper/http.interceptor';
     AppComponent,
     LandingComponent,
     DashboardComponent,
-    InputComponent
+    InputComponent,
+    SigninComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +35,8 @@ import { httpInterceptorProviders } from './_helper/http.interceptor';
     BrowserAnimationsModule,
     FormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatRadioModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]

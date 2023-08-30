@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs';
 
-import { MustMatch } from 'src/app/_helper/must-match.validator';
 import { AuthService } from 'src/app/service/auth.service';
 import { StorageService } from 'src/app/service/storage.service';
 import { Account } from 'src/app/_model/account';
@@ -32,14 +31,6 @@ export class LandingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-      this.form = this.formBuilder.group({
-        username: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', Validators.required],
-        confirmPassword: ['', Validators.required],
-      }, {
-        validator: MustMatch('password', 'confirmPassword')
-      });
 
       if(this.storageSevice.isLoggedIn()) {
         this.isLogged = true;
@@ -79,54 +70,57 @@ export class LandingComponent implements OnInit {
     event.stopPropagation();
   }
 
-  onSubmitLogin() {
-    this.submitted = true;
-
-    // Stop here if form is invalid
-    if(this.form.invalid) {
-      return;
-    }
-
-    console.log(this.form.value)
-    this.authService.login(this.f['email'].value, this.f['password'].value)
-      .pipe(first())
-      .subscribe({
-        next: (res) => {
-          this.storageSevice.saveUser(res)
-          this.router.navigate(['/dashboard']);
-        },
-        error: (error) => {
-          console.error(error)
-        }
-      })
-
+  regIsSuceed(){
+    this.registerIsShown = false;
   }
 
-  onSubmitRegister() {
-    this.submitted = true;
+  // onSubmitLogin() {
+  //   this.submitted = true;
 
-    // Stop here if form is invalid
-    if(this.form.invalid) {
-      return;
-    }
+  //   // Stop here if form is invalid
+  //   // if(this.form.invalid) {
+  //   //   return;
+  //   // }
 
-    delete this.form.value.confirmPassword;
-    let reg_userInfo: Account = this.form.value
-    console.log(reg_userInfo)
+  //   // console.log(this.form.value)
+  //   this.authService.login(this.f['email'].value, this.f['password'].value)
+  //     .pipe(first())
+  //     .subscribe({
+  //       next: (res) => {
+  //         this.storageSevice.saveUser(res)
+  //         this.router.navigate(['/dashboard']);
+  //       },
+  //       error: (error) => {
+  //         console.error(error)
+  //       }
+  //     })
+  // }
 
-    this.authService.register(reg_userInfo)
-      .pipe(first())
-      .subscribe({
-        next: (res) => {
-          console.log(res)
-          if(res) {
-            this.registerIsShown = false;
-            // window.location.reload();
-          }
-        },
-        error: (e) => {
-          console.log(e);
-        }
-      })
-  }
+  // onSubmitRegister() {
+  //   this.submitted = true;
+
+  //   // Stop here if form is invalid
+  //   if(this.form.invalid) {
+  //     return;
+  //   }
+
+  //   delete this.form.value.confirmPassword;
+  //   let reg_userInfo: Account = this.form.value
+  //   console.log(reg_userInfo)
+
+  //   this.authService.register(reg_userInfo)
+  //     .pipe(first())
+  //     .subscribe({
+  //       next: (res) => {
+  //         console.log(res)
+  //         if(res) {
+  //           this.registerIsShown = false;
+  //           // window.location.reload();
+  //         }
+  //       },
+  //       error: (e) => {
+  //         console.log(e);
+  //       }
+  //     })
+  // }
 }

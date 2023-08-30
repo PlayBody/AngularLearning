@@ -31,21 +31,21 @@
             <table class="adtable w-100">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th *ngFor="let subject of subjects">
+                        <th class="th">Name</th>
+                        <th *ngFor="let subject of subjects" class="th">
                             <div>
                                 <div>{{subject.testType}}</div>
                                 <div>{{subject.testDate}}</div>
                             </div>
                         </th>
-                        <th>Average</th>
+                        <th class="th">Average</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let user of user_score">
-                        <td>{{user.username}}</td>
-                        <td *ngFor="let subject of subjects">{{filterBy(user.username!, subject.testType, subject.testDate)}}</td>
-                        <td>{{calcAverage(scoreOfUser)}}</td>
+                        <td class="td">{{user.username}}</td>
+                        <td *ngFor="let subject of subjects" class="td">{{filterBy(user.username!, subject.testType, subject.testDate)}}</td>
+                        <td class="td">{{calcAverage(scoreOfUser)}}</td>
                     </tr>
                 </tbody>
             </table>
