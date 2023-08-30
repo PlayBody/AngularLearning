@@ -87,6 +87,7 @@ export class LandingComponent implements OnInit {
       return;
     }
 
+    console.log(this.form.value)
     this.authService.login(this.f['email'].value, this.f['password'].value)
       .pipe(first())
       .subscribe({
