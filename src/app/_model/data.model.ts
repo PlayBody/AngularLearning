@@ -1,6 +1,6 @@
 export class Test {
     test_id?: any;
-    sub_name?: string;
+    subName?: string;
     testDate?: any;
     score?: number;
 }

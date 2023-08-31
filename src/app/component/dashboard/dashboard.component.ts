@@ -20,12 +20,14 @@ export class DashboardComponent implements OnInit {
   addWindow = false;
   auth_user?: string;
   usernames: string[] = [];
-  scores: { username: string, score: number | 0 }[] = [];
+  scores: { username: string, score: number | '0' }[] = [];
   user_score: Data[] = [];
   scoreOfUser: number[] = [];
+  scoreArray: number[][] = [];
   subjects: Subject[] = [];
   sub_name!: string;
   testDate!: any;
+  
 
   @ViewChild('addScroeComponent', {static: false}) scoreComponent! : ElementRef;
   @ViewChild('subInput', {static: false}) subInput!: InputComponent;
@@ -62,6 +64,7 @@ export class DashboardComponent implements OnInit {
 
       this.subjectService.getAll().subscribe({
         next: (res) => {
+          console.log(res)
           res.map(test => this.subjects.push(test))
         },
         error: (e) => console.log(e)
@@ -69,8 +72,17 @@ export class DashboardComponent implements OnInit {
 
       this.scoreService.getAllScore().subscribe({
         next: (response) => {
-          console.log(response)
-          response.map((res) => this.user_score.push(res))
+          response.map((res) => {
+            this.user_score.push(res)
+            let EachUserArray : number [] = []
+            res.test?.map(test => {
+              if(test.score != undefined) 
+                EachUserArray.push(test.score)
+            })
+            this.scoreArray.push(EachUserArray);
+            
+          })
+          console.log(this.user_score)
         },
         error: (e) => console.log(e)
       })
@@ -99,15 +111,15 @@ export class DashboardComponent implements OnInit {
       data.username === currentUser &&
       data.test!.map((test) => {
         if (
-          test.sub_name === testType &&
+          test.subName === testType &&
           test.testDate === testDate
         ) {
           score_array.push(test.score!)
         }
       })
+      
     })
 
-    this.scoreOfUser = score_array;
 
     return score_array;
   }
@@ -117,11 +129,13 @@ export class DashboardComponent implements OnInit {
   }
 
   calcAverage(scores: number[]): number {
+    // console.log("this is scoreofUser", scores)
+    console.log(scores);
     const len = scores.length;
     if(len == 0)  return 0;
 
     const sum = scores.reduce((total, score) => total + score, 0);
-    const average = sum / len;
+    const average = Number((sum / len).toFixed(2))
     return average;
   }
 

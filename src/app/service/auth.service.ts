@@ -3,10 +3,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Account } from '../_model/account';
 
-const baseUrl = 'http://192.168.133.38:8080/api';
+const baseUrl = 'http://localhost:8080/api';
 
 const httpOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json'})
+  headers: new HttpHeaders({'Content-Type': 'application/json', 'withCredentials':'true'})
 }
 
 @Injectable({
@@ -19,6 +19,7 @@ export class AuthService {
   login(data: any): Observable<Account> {
     // let userInfo = JSON.stringify(data)
     // console.log(userInfo)
+    
     console.log(data.email);
     return this.http.post(`${baseUrl}/auth/signin`, data, httpOptions)
   }
@@ -28,7 +29,7 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    return this.http.post(`${baseUrl}/signout`, {}, httpOptions);
+    return this.http.post(`${baseUrl}/auth/signout`, {}, httpOptions);
   }
 
   getAll(): Observable<Account[]> {

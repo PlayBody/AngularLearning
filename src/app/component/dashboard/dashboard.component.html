@@ -42,10 +42,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let user of user_score">
+                    <tr *ngFor="let user of user_score; let i = index">
                         <td class="td">{{user.username}}</td>
                         <td *ngFor="let subject of subjects" class="td">{{filterBy(user.username!, subject.testType, subject.testDate)}}</td>
-                        <td class="td">{{calcAverage(scoreOfUser)}}</td>
+                        <td class="td">{{calcAverage(scoreArray[i])}}</td>
                     </tr>
                 </tbody>
             </table>
