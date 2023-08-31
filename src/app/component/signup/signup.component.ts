@@ -33,7 +33,7 @@ export class SignupComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
-      role: ['', Validators.required]
+      role: [[], Validators.required]
     }, {
       validator: MustMatch('password', 'confirmPassword')
     });
@@ -54,6 +54,13 @@ export class SignupComponent implements OnInit {
     }
 
     delete this.form.value.confirmPassword;
+    switch (this.form.value['role']) {
+      case 'user':
+        this.form.value['role'] = ['user'];
+        break;
+      case 'admin':
+        this.form.value['role'] = ['admin'];      
+    }
     let reg_userInfo: Account = this.form.value
     console.log(reg_userInfo)
 

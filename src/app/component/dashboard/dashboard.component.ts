@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit {
   addWindow = false;
   auth_user?: string;
   usernames: string[] = [];
-  scores: { username: string, score: number | '0' }[] = [];
+  scores: { username: string, score: number | null }[] = [];
   user_score: Data[] = [];
   scoreOfUser: number[] = [];
   scoreArray: number[][] = [];
@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit {
   testDate!: any;
   
 
-  @ViewChild('addScroeComponent', {static: false}) scoreComponent! : ElementRef;
+  @ViewChild('addScoreComponent', {static: false}) scoreComponent! : ElementRef;
   @ViewChild('subInput', {static: false}) subInput!: InputComponent;
   @ViewChild('dateInput', {static: false}) dateInput!: InputComponent
   
@@ -50,7 +50,7 @@ export class DashboardComponent implements OnInit {
         this.auth_user = user.username;
       // }
 
-      // usernames = ['RHS', 'KDI', 'HNJ', 'RJM', 'KYH', 'CGS', 'PSG', 'CG']
+      // this.usernames = ['RHS', 'KDI', 'HNJ', 'RJM', 'KYH', 'CGS', 'PSG', 'CG']
 
       this.authService.getAll().subscribe({
         next: (res) =>{

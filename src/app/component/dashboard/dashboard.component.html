@@ -55,7 +55,7 @@
     <div *ngIf="addWindow" 
         class="addScoreBackground w-100 vh-100 position-absolute top-0 start-0 end-0 bottom-0" 
         (click)="addWindow=false">
-        <div #addScroeComponent class="addScoreComponent" (click)="$event.stopPropagation()">
+        <div #addScoreComponent class="addScoreComponent" (click)="$event.stopPropagation()">
             <div class="addtitle ps-5 pt-2">Add Score</div>
             <div class="addDetail mt-2 p-2 w-100">
                 <div class="row">
@@ -69,8 +69,8 @@
                     </div>
                 </div>
                 <div class="inputArea mx-auto d-flex justify-content-around pt-3">
-                    <div *ngFor="let username of usernames; let i=index" class="d-flex mb-3">
-                        <div class="pe-3 pt-2">{{username}}</div>
+                    <div *ngFor="let user of user_score; let i=index" class="d-flex mb-3">
+                        <div class="pe-3 pt-2">{{user.username!}}</div>
                         <input type="number" class="scoreInput px-3 py-1" [(ngModel)]="scores[i].score">
                     </div>
                 </div>
