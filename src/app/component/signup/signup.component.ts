@@ -55,13 +55,12 @@ export class SignupComponent implements OnInit {
 
     delete this.form.value.confirmPassword;
     let reg_userInfo: Account = this.form.value
-    console.log(reg_userInfo)
 
     this.authService.register(reg_userInfo)
       .pipe(first())
       .subscribe({
         next: (res) => {
-          console.log(res)
+          console.log("register is successfull", res)
           if(res) {
             this.isSuceed.emit();
             // window.location.reload();

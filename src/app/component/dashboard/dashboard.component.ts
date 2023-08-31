@@ -41,12 +41,12 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-      // if(!this.storageService.isLoggedIn()){
-      //   this.router.navigate([''])
-      // } else {
+      if(!this.storageService.isLoggedIn()){
+        this.router.navigate([''])
+      } else {
         const user = this.storageService.getUser()
         this.auth_user = user.username;
-      // }
+      }
 
       // usernames = ['RHS', 'KDI', 'HNJ', 'RJM', 'KYH', 'CGS', 'PSG', 'CG']
 

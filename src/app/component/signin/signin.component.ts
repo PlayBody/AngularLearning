@@ -46,17 +46,11 @@ export class SigninComponent implements OnInit {
     if(this.form.invalid) {
       return;
     }
-    
-    console.log("Submit Login");
-
-    let testText = this.authService.getTestUrl().subscribe({next: (res)=>{console.log(res)}});
-
 
     this.authService.login(this.form.value)
       .pipe(first())
       .subscribe({
         next: (res) => {
-          console.log("login");
           this.storageService.saveUser(res)
           this.router.navigate(['/dashboard']);
         },
