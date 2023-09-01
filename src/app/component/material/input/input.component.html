@@ -1,7 +1,7 @@
 <form class="input-form">
     <mat-form-field class="input-full-width">
       <mat-label>{{matLabel}}</mat-label>
-      <input matInput [placeholder]="placeholder" [(ngModel)]="inputValue" (input)="userChange($event)" (keyup)="onInputChange($event)"  [ngModelOptions]="{standalone: true}">
+      <input matInput [placeholder]="placeholder" [(ngModel)]="inputValue" (input)="userChange()" (keyup)="onInputChange($event)"  [ngModelOptions]="{standalone: true}">
     </mat-form-field>
 </form>
   

@@ -21,6 +21,12 @@ import { httpInterceptorProviders } from './_helper/http.interceptor';
 import { SigninComponent } from './component/signin/signin.component';
 import { SignupComponent } from './component/signup/signup.component';
 import { TableComponent } from './component/material/table/table.component';
+import { NZ_I18N } from 'ng-zorro-antd/i18n';
+import { en_US } from 'ng-zorro-antd/i18n';
+import { registerLocaleData } from '@angular/common';
+import en from '@angular/common/locales/en';
+
+registerLocaleData(en);
 
 
 @NgModule({
@@ -48,7 +54,7 @@ import { TableComponent } from './component/material/table/table.component';
     MatPaginatorModule,
     MatSortModule
   ],
-  providers: [httpInterceptorProviders],
+  providers: [httpInterceptorProviders, { provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

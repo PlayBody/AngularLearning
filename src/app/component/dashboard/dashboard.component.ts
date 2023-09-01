@@ -112,25 +112,20 @@ export class DashboardComponent implements OnInit {
     }, 0);
   }
 
-  subValue(event: string){
-    console.log(event)
-    // this.sub_name = event;
-
-  }
 
   addScore(){
-    this.sub_name = this.subInput.inputValue!;
-    this.testDate = this.dateInput.inputValue!;
-    // const addDate = this.user_names.map((user_name, i) => {
-    //   return {'subname': this.sub_name, 'testDate': this.testDate, `${user_name}`: this.scoreOfUser[i]};
-    // })
-    // console.log(addDate)
-     
-    // this.scoreService.addScore(addDate).subscribe({
-    //   next: (res) => {
-    //     if(res) this.addWindow = false;
-    //   },
-    //   error: (e) => console.log(e)
-    // })
+    const addDate : any = {};
+    addDate['subname'] = this.sub_name;
+    addDate['testDate'] = this.testDate;
+    this.user_names.map((user_name, i) => {
+      addDate[user_name] = this.scoreOfUser[i];
+    })
+    
+    this.scoreService.addScore(addDate).subscribe({
+      next: (res) => {
+        if(res) this.addWindow = false;
+      },
+      error: (e) => console.log(e)
+    })
   }
 }

@@ -20,7 +20,7 @@ export class InputComponent {
     this.filterByValue.emit(keyCode);
   }
 
-  userChange(event: any){
+  userChange(){
     this.inputValueChange.emit(this.inputValue)
   }
 
