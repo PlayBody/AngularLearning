@@ -7,15 +7,21 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class InputComponent {
 
-  inputValue?: string;
+  inputValue: string = '';
 
   @Input() matLabel = '';
   @Input() placeholder = '';
 
+  @Output() filterByValue = new EventEmitter<string>();
   @Output() inputValueChange = new EventEmitter<string>();
 
-  onInputChange() {
-    this.inputValueChange.emit(this.inputValue);
+  onInputChange(event: Event) {
+    const keyCode = (event.target as HTMLInputElement).value;
+    this.filterByValue.emit(keyCode);
+  }
+
+  userChange(event: any){
+    this.inputValueChange.emit(this.inputValue)
   }
 
 }

@@ -27,12 +27,12 @@ export class LandingComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private storageSevice: StorageService
+    private storageService: StorageService
   ) {}
 
   ngOnInit() {
 
-      if(this.storageSevice.isLoggedIn()) {
+      if(this.storageService.isLoggedIn()) {
         this.isLogged = true;
       }
   }
@@ -41,21 +41,42 @@ export class LandingComponent implements OnInit {
   get f() { return this.form.controls; }
 
   showLogin(){
-    this.loginIsShown = true;
-    setTimeout(() => {
-      this.loginWindow.nativeElement.classList.add('animation');
-    }, 0);
+    if (this.isLogged) {
+      this.logout();
+    } else {
+      this.loginIsShown = true;
+      setTimeout(() => {
+        this.loginWindow.nativeElement.classList.add('animation');
+      }, 0);
+    }
+    
   }
 
   showRegister(){
-    this.registerIsShown = true;
-    setTimeout(() => {
-      this.registerWindow.nativeElement.classList.add('animation');
-    }, 0);
+    if (this.isLogged) {
+      this.router.navigate(['/dashboard'])
+    } else {
+      this.registerIsShown = true;
+      setTimeout(() => {
+        this.registerWindow.nativeElement.classList.add('animation');
+      }, 0);
+    }
+    
   }
 
-  nextPage(){
-    this.router.navigate(['/dashboard'])
+  logout() {
+    this.authService.logout().subscribe({
+      next: (res) => {
+        console.log(res);
+        if(res) {
+          window.location.reload();
+          this.storageService.clean()
+        }
+      },
+      error: (e) => {
+        console.log(e)
+      }
+    })
   }
 
   hideLogin() {
@@ -73,54 +94,5 @@ export class LandingComponent implements OnInit {
   regIsSuceed(){
     this.registerIsShown = false;
   }
-
-  // onSubmitLogin() {
-  //   this.submitted = true;
-
-  //   // Stop here if form is invalid
-  //   // if(this.form.invalid) {
-  //   //   return;
-  //   // }
-
-  //   // console.log(this.form.value)
-  //   this.authService.login(this.f['email'].value, this.f['password'].value)
-  //     .pipe(first())
-  //     .subscribe({
-  //       next: (res) => {
-  //         this.storageSevice.saveUser(res)
-  //         this.router.navigate(['/dashboard']);
-  //       },
-  //       error: (error) => {
-  //         console.error(error)
-  //       }
-  //     })
-  // }
-
-  // onSubmitRegister() {
-  //   this.submitted = true;
-
-  //   // Stop here if form is invalid
-  //   if(this.form.invalid) {
-  //     return;
-  //   }
-
-  //   delete this.form.value.confirmPassword;
-  //   let reg_userInfo: Account = this.form.value
-  //   console.log(reg_userInfo)
-
-  //   this.authService.register(reg_userInfo)
-  //     .pipe(first())
-  //     .subscribe({
-  //       next: (res) => {
-  //         console.log(res)
-  //         if(res) {
-  //           this.registerIsShown = false;
-  //           // window.location.reload();
-  //         }
-  //       },
-  //       error: (e) => {
-  //         console.log(e);
-  //       }
-  //     })
-  // }
+ 
 }

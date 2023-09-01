@@ -54,6 +54,13 @@ export class SignupComponent implements OnInit {
     }
 
     delete this.form.value.confirmPassword;
+    switch (this.form.value['role']) {
+      case 'user':
+        this.form.value['role'] = ['user'];
+        break;
+      case 'admin':
+        this.form.value['role'] = ['admin'];
+    }
     let reg_userInfo: Account = this.form.value
 
     this.authService.register(reg_userInfo)

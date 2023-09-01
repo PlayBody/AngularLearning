@@ -33,7 +33,6 @@ export class AuthService {
   }
 
   getAll(): Observable<Account[]> {
-    console.log("getAll() method is called")
     return this.http.get<Account[]>(`${baseUrl}/user`)
   }
 

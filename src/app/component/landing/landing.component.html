@@ -1,14 +1,9 @@
 <div class="landing d-flex justify-content-center position-relative">
     <div class="adBtnGroup">
-        <div *ngIf="isLogged; else notLogged" class="d-flex justify-content-center">
-            <div class="adBtn" (click)="nextPage()"><span class="adtxt">CONTINUE</span></div>
+        <div class="d-flex justify-content-center">
+            <div class="adBtn" (click)="showLogin()"><span class="adtxt">{{isLogged ? 'LOGOUT' : 'LOGIN'}}</span></div>
+            <div class="adBtn" (click)="showRegister()"><span class="adtxt">{{isLogged ? 'CONTINUE' : 'REGISTER'}}</span></div>
         </div>
-        <ng-template #notLogged>
-            <div class="d-flex justify-content-center">
-                <div class="adBtn" (click)="showLogin()"><span class="adtxt">LOGIN</span></div>
-                <div class="adBtn" (click)="showRegister()"><span class="adtxt">REGISTER</span></div>
-            </div>
-        </ng-template>
     </div>
 
     <div *ngIf="loginIsShown" class="loginComp position-absolute w-100 h-100 start-0 top-0" (click)="hideLogin()">

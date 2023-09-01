@@ -7,78 +7,58 @@
         </div>
     </div>
 
-    <div class="flex-grow-1">
+    <div class="flex-grow-1" *ngIf="user_score.length!=0">
         <div class="tableContent mx-auto px-3 py-5">
-            <div class="topbar d-flex pe-5">
+            <div class="topbar d-flex pe-5 mb-5">
                 <div class="row p-0 m-0 flex-grow-1">
                     <div class="col-7">
                         <div class="row p-0 m-0">
                             <div class="filterTXT col-2 text-center pt-3">Date</div>
-                            <app-input class="matInput col-5" matLabel="FROM" placeholder="Ex. 06.01"></app-input>
-                            <app-input class="matInput col-5" matLabel="TO" placeholder="Ex. 06.01"></app-input>
+                            <app-input class="col-5" matLabel="FROM" placeholder="Ex. 06-01" (filterByValue)="DateFrom($event)"></app-input>
+                            <app-input class="col-5" matLabel="TO" placeholder="Ex. 06-01" (filterByValue)="DateTo($event)"></app-input>
                         </div>
                     </div>
                     <div class="col-5">
                         <div class="row">
                             <div class="filterTXT col-4 text-center pt-3">Subject</div>
-                            <app-input class="col-8" matLabel="SUBJECT" placeholder="Ex. English"></app-input>
+                            <app-input class="col-8" matLabel="SUBJECT" placeholder="Ex. English" (filterByValue)="subject($event)"></app-input>
                         </div>
                     </div>
                 </div>
                 <div class="addBtn py-1 px-3 ms-4" (click)="showAddScore()">ADD</div>
             </div>
             
-            <table class="adtable w-100">
-                <thead>
-                    <tr>
-                        <th class="th">Name</th>
-                        <th *ngFor="let subject of subjects" class="th">
-                            <div>
-                                <div>{{subject.testType}}</div>
-                                <div>{{subject.testDate}}</div>
-                            </div>
-                        </th>
-                        <th class="th">Average</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let user of user_score">
-                        <td class="td">{{user.username}}</td>
-                        <td *ngFor="let subject of subjects" class="td">{{filterBy(user.username!, subject.testType, subject.testDate)}}</td>
-                        <td class="td">{{calcAverage(scoreOfUser)}}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <app-table [scoreData]="user_score" [filterByDateFrom]="filterByDateFrom" [filterByDateTo]="filterByDateTo" [filterBySubject]="filterBySubject"></app-table>
         </div>
     </div>
 
-    <div *ngIf="addWindow" 
+    <div [hidden]="!addWindow"
         class="addScoreBackground w-100 vh-100 position-absolute top-0 start-0 end-0 bottom-0" 
         (click)="addWindow=false">
-        <div #addScroeComponent class="addScoreComponent" (click)="$event.stopPropagation()">
-            <div class="addtitle ps-5 pt-2">Add Score</div>
-            <div class="addDetail mt-2 p-2 w-100">
-                <div class="row">
-                    <div class="col-7 d-flex">
-                        <div class="pe-2 pt-3">Subject Name</div>
-                        <app-input #subInput matLabel="Subject" placeholder="Ex. Math"></app-input>
+            <div #addScroeComponent class="addScoreComponent position-absolute" (click)="$event.stopPropagation();">
+                <div class="addtitle ps-5 pt-2">Add Score</div>
+                <div class="addDetail mt-2 p-2 w-100">
+                    <div class="row">
+                        <div class="col-7 d-flex">
+                            <div class="pe-2 pt-3">Subject Name</div>
+                            <app-input #subInput matLabel="Subject" placeholder="Ex. Math" (inputValueChange)="subValue($event)"></app-input>
+                        </div>
+                        <div class="col-5 d-flex">
+                            <div class="pe-2 pt-3">Date</div>
+                            <app-input #dateInput matLabel="Date" placeholder="Ex. 06-01"></app-input>
+                        </div>
                     </div>
-                    <div class="col-5 d-flex">
-                        <div class="pe-2 pt-3">Date</div>
-                        <app-input #dateInput matLabel="Date" placeholder="Ex. 06-01"></app-input>
+                    <div class="inputArea mx-auto d-flex justify-content-around pt-3">
+                        <div *ngFor="let user_name of user_names; let i=index" class="d-flex mb-3">
+                            <div class="pe-3 pt-2">{{user_name}}</div>
+                            <input type="number" class="scoreInput px-3 py-1" [(ngModel)]="scoreOfUser[i]">
+                        </div>
                     </div>
-                </div>
-                <div class="inputArea mx-auto d-flex justify-content-around pt-3">
-                    <div *ngFor="let username of usernames; let i=index" class="d-flex mb-3">
-                        <div class="pe-3 pt-2">{{username}}</div>
-                        <input type="number" class="scoreInput px-3 py-1" [(ngModel)]="scores[i].score">
+                    <div class="d-flex justify-content-end mt-3 mb-1 me-2">
+                        <div class="adNewBtn py-1 px-3 me-3" (click)="addScore()">Add</div>
+                        <div class="adNewBtn py-1 px-3" (click)="addWindow=false">Cancel</div>
                     </div>
-                </div>
-                <div class="d-flex justify-content-end mt-3 mb-1 me-2">
-                    <div class="adNewBtn py-1 px-3 me-3" (click)="addScore()">Add</div>
-                    <div class="adNewBtn py-1 px-3" (click)="addWindow=false">Cancel</div>
                 </div>
             </div>
-        </div>
     </div>
 </div>

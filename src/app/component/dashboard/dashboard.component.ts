@@ -16,21 +16,21 @@ import { Data } from 'src/app/_model/data.model';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-
   addWindow = false;
   auth_user?: string;
-  usernames: string[] = [];
-  scores: { username: string, score: number | 0 }[] = [];
-  user_score: Data[] = [];
+  user_names: Array<string> = [];
+  user_score: Array<Data> = [];
   scoreOfUser: number[] = [];
   subjects: Subject[] = [];
   sub_name!: string;
   testDate!: any;
+  filterByDateFrom: string = "";
+  filterByDateTo: string = "";
+  filterBySubject: string = "";
 
   @ViewChild('addScroeComponent', {static: false}) scoreComponent! : ElementRef;
   @ViewChild('subInput', {static: false}) subInput!: InputComponent;
   @ViewChild('dateInput', {static: false}) dateInput!: InputComponent
-  
 
   constructor( 
     private router: Router,
@@ -40,40 +40,38 @@ export class DashboardComponent implements OnInit {
     private subjectService: SubjectService
   ) {}
 
-  ngOnInit(): void {
-      if(!this.storageService.isLoggedIn()){
-        this.router.navigate([''])
-      } else {
-        const user = this.storageService.getUser()
-        this.auth_user = user.username;
-      }
+  ngOnInit() {
+    if(!this.storageService.isLoggedIn()){
+      this.router.navigate([''])
+    } else {
+      const user = this.storageService.getUser()
+      this.auth_user = user.username;
+    }
 
-      // usernames = ['RHS', 'KDI', 'HNJ', 'RJM', 'KYH', 'CGS', 'PSG', 'CG']
+    this.authService.getAll().subscribe({
+      next: (res) =>{
+        res.map((account) => {
+          this.user_names.push(account.username!);
+        })
+      },
+      error: (e) => console.log(e)
+    })
 
-      this.authService.getAll().subscribe({
-        next: (res) =>{
-          res.map((account, index) => {
-            this.usernames.push(account.username!);
-            this.scores[index].username = account.username!;
-          })
-        },
-        error: (e) => console.log(e)
-      })
-
-      this.subjectService.getAll().subscribe({
-        next: (res) => {
-          res.map(test => this.subjects.push(test))
-        },
-        error: (e) => console.log(e)
-      })
-
-      this.scoreService.getAllScore().subscribe({
-        next: (response) => {
-          console.log(response)
-          response.map((res) => this.user_score.push(res))
-        },
-        error: (e) => console.log(e)
-      })
+      // this.subjectService.getAll().subscribe({
+      //   next: (res) => {
+      //     res.map(test => this.subjects.push(test))
+      //   },
+      //   error: (e) => console.log(e)
+      // })
+      
+    this.scoreService.getAllScore().subscribe({
+      next: (response) => {
+        response.map((res) => { 
+          this.user_score.push(res) 
+        });
+      },
+      error: (e) => console.log(e)
+    })
   }
 
   logout(){
@@ -91,38 +89,20 @@ export class DashboardComponent implements OnInit {
     })
   }
 
+  DateFrom(keyCode: string) {
+    this.filterByDateFrom = keyCode;
+  }
 
-  filterBy(currentUser: string, testType?: string, testDate?: string) {
-    const score_array: number[] = [];
+  DateTo(keyCode: string) {
+    this.filterByDateTo = keyCode;
+  }
 
-    this.user_score.map((data) => {
-      data.username === currentUser &&
-      data.test!.map((test) => {
-        if (
-          test.sub_name === testType &&
-          test.testDate === testDate
-        ) {
-          score_array.push(test.score!)
-        }
-      })
-    })
-
-    this.scoreOfUser = score_array;
-
-    return score_array;
+  subject(keyCode: string) {
+    this.filterBySubject = keyCode;
   }
 
   previous(){
     this.router.navigate([''])
-  }
-
-  calcAverage(scores: number[]): number {
-    const len = scores.length;
-    if(len == 0)  return 0;
-
-    const sum = scores.reduce((total, score) => total + score, 0);
-    const average = sum / len;
-    return average;
   }
 
   showAddScore(){
@@ -132,15 +112,25 @@ export class DashboardComponent implements OnInit {
     }, 0);
   }
 
+  subValue(event: string){
+    console.log(event)
+    // this.sub_name = event;
+
+  }
+
   addScore(){
     this.sub_name = this.subInput.inputValue!;
     this.testDate = this.dateInput.inputValue!;
-    const addDate = {'subname': this.sub_name, 'testDate': this.testDate, 'scores': this.scores};
-    this.scoreService.addScore(addDate).subscribe({
-      next: (res) => {
-        if(res) this.addWindow = false;
-      },
-      error: (e) => console.log(e)
-    })
+    // const addDate = this.user_names.map((user_name, i) => {
+    //   return {'subname': this.sub_name, 'testDate': this.testDate, `${user_name}`: this.scoreOfUser[i]};
+    // })
+    // console.log(addDate)
+     
+    // this.scoreService.addScore(addDate).subscribe({
+    //   next: (res) => {
+    //     if(res) this.addWindow = false;
+    //   },
+    //   error: (e) => console.log(e)
+    // })
   }
 }
