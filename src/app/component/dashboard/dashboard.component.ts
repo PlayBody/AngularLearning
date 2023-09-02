@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 
 import { InputComponent } from '../material/input/input.component';
 import { StorageService } from 'src/app/service/storage.service';
@@ -27,6 +26,7 @@ export class DashboardComponent implements OnInit {
   filterByDateFrom: string = "";
   filterByDateTo: string = "";
   filterBySubject: string = "";
+
 
   @ViewChild('addScroeComponent', {static: false}) scoreComponent! : ElementRef;
   @ViewChild('subInput', {static: false}) subInput!: InputComponent;
@@ -56,13 +56,6 @@ export class DashboardComponent implements OnInit {
       },
       error: (e) => console.log(e)
     })
-
-      // this.subjectService.getAll().subscribe({
-      //   next: (res) => {
-      //     res.map(test => this.subjects.push(test))
-      //   },
-      //   error: (e) => console.log(e)
-      // })
       
     this.scoreService.getAllScore().subscribe({
       next: (response) => {
@@ -114,14 +107,20 @@ export class DashboardComponent implements OnInit {
 
 
   addScore(){
-    const addDate : any = {};
-    addDate['subname'] = this.sub_name;
-    addDate['testDate'] = this.testDate;
+    const addData : any = {} // {subname: '', testDate: '', scores: []} 
+    const scores : any[] = []  //{username: '', score: ''}[];
+    addData['subName'] = this.sub_name;
+    addData['testDate'] = this.testDate;
     this.user_names.map((user_name, i) => {
-      addDate[user_name] = this.scoreOfUser[i];
+      const score: any = {};
+      score['username'] = user_name;
+      score['score'] = this.scoreOfUser[i];
+      scores.push(score)
     })
+    addData['scores'] = scores;
+    console.log(addData)
     
-    this.scoreService.addScore(addDate).subscribe({
+    this.scoreService.addScore(addData).subscribe({
       next: (res) => {
         if(res) this.addWindow = false;
       },

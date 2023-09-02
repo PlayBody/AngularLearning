@@ -14,7 +14,9 @@ export class TableComponent implements AfterViewInit, OnInit, OnChanges {
   theader: any[] = [];
   tsub_name: any[] = [];
   tValue: any[] = [];
+  filterByValue: string = '';
   dataSource: MatTableDataSource<any>;
+
   @Input() scoreData : Array<Data> = [];
   @Input() filterByDateFrom : string = "";
   @Input() filterByDateTo : string = "";
@@ -35,7 +37,7 @@ export class TableComponent implements AfterViewInit, OnInit, OnChanges {
       this.theader.push(t.subName)
     });
     this.theader.push('average')
-    console.log("headers of table", this.theader)
+    // console.log("headers of table", this.theader)
 
     // set the body of table
     this.scoreData.forEach(data => {
@@ -68,7 +70,7 @@ export class TableComponent implements AfterViewInit, OnInit, OnChanges {
       .map(filter => filter.trim().toLowerCase())
       .join(' ');
 
-    console.log("step2: ", this.dataSource)
+    console.log("step2: ", this.dataSource.filter)
         
     if(this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();

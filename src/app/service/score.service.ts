@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Data } from '../_model/data.model';
 
 const API_URL = 'http://localhost:8080/api/grades';
+
 
 @Injectable({
   providedIn: 'root'
